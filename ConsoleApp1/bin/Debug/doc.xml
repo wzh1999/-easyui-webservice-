@@ -1,0 +1,3 @@
+<Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.xzsoft.com">
+  <Header />
+</Envelope>

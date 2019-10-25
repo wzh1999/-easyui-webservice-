@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0" />
+    <title>值班记事</title>
+    <link rel="stylesheet" type="text/css" href="../EasyUI/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../EasyUI/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="../EasyUI/plugins/portal.css" />
+    <link rel="stylesheet" type="text/css" href="media.css" />
+    <script type="text/javascript" src="EasyUI/jquery-1.8.3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../EasyUI/jquery.easyui.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../EasyUI/locale/easyui-lang-zh_CN.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../EasyUI/plugins/jquery.portal.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/xml2.js" chat="utf-8"></script>
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+            border: 0;
+            min-width: 11rem;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input {
+            margin-right: 20px;
+        }
+
+        #title {
+            width: 100%;
+            height: 10%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="title">
+        单位：<input type="text" name="username" value="普安发电" readonly="readonly" />
+        <!--日志类型:<select id="zhitype" class="easyui-combobox" name="dept" style="width:200px;">-->
+        日志类型: <select id="zhitype" style="width:200px;">
+            <!--<option value="值长日志">值长日志</option>
+            <option value="#1机组单元长值班日志">#1机组单元长值班日志</option>
+            <option value="#2机组单元长值班日志">#2机组单元长值班日志</option>
+            <option value="燃运班长">燃运班长</option>
+            <option value="脱硫班长">脱硫班长</option>
+            <option value="光伏运行">光伏运行</option>-->
+            <option value="1">值长日志</option>
+            <option value="2">#1机组单元长值班日志</option>
+            <option value="3">#2机组单元长值班日志</option>
+            <option value="4">燃运班长</option>
+            <option value="5">脱硫班长</option>
+            <option value="6">光伏运行</option>
+        </select>
+        <!--开始时间：<input id="strat" type="text" class="easyui-datebox" required="required" value="2019-01-01" />至
+        <input id="endtime" type="text" class="easyui-datebox" required="required" value="2019-10-01" />-->
+        <a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+        <table id="tab"></table>
+    </div>
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $("#tab").datagrid({
+                url: 'index.aspx',
+                striped: true,//是否显示斑马线效果
+                singleSelect: false,//允许选择几行
+                //  rownumbers: true,
+                fitColumns: true,//自动填充单元格
+                // pagination: true,
+                columns: [[
+                    //  { field: "ck", title: "", width: 150, checkbox: true, alige:'center'},
+                    // { field: "sid", title: "序号", width: 150, alige: 'center'},
+                    //{ field: "orgName", title: "单位", width: 150, alige: 'center'},
+                    // { field: "logTypeName", title: "日志类型", width: 150, alige: 'center'},
+                    { field: "empName", title: "记事人", width:100, align: 'center' },
+                    {
+                        field: "happenTime", title: "发生时间", width: 100, align: 'center', formatter: function (value, row, index) {
+                            var date = new Date(value)
+                            return '<div">' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + '</br>' + (date.getHours() >= 0 && date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':' + (date.getMinutes() >= 0 && date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':' + (date.getMilliseconds() >= 0 && date.getMilliseconds() < 10 ? '0' + date.getMilliseconds() : date.getMilliseconds()) + '</div>';
+                        }
+
+                    },
+                    {
+                        field: "notePadContent", title: "记事内容", width: 500, formatter: function (value, row, index) {
+                            return '<div style="width=100px;word-break:break-all; word-wrap:break-word;white-space:pre-wrap;">' + value + '</div>';
+                        }
+                    }
+
+
+                    //{ field: "pmsYxJsflName", title: "记事类型", width: 150, alige: 'center' }
+                    // { field: "setName", title: "机组", width: 150, alige: 'center' }
+                ]]
+            })
+
+        })
+
+        $(function () {
+
+
+            //查询按钮事件
+            $("#btn").linkbutton({
+                onClick: function () {
+                    console.log($("#zhitype option:selected").text());
+                    //console.log($("#strat").val());
+                    //console.log($("#endtime").val());
+
+
+                    $.ajax({
+                        url: "show.aspx",
+                        type: "post",
+                        //contentType:"application/json",
+                        data: {
+                            type: $("#zhitype option:selected").text()
+                            //startTime: $("#strat").val(),
+                            //endtime: $("#endtime").val()
+
+                        },
+                        success: function (data) {
+                            // console.info(data);
+                            //将后台接受到的xml转换成js数据
+                            //var xmljs = new xmljs();
+                            //var json = xmljs.xml2json(data);
+                            //var jsonObj = json.string._text;
+                            //var next = eval(jsonObj);
+                            //console.log(next);
+                            //console.info(jsonObj);
+                            //console.log("转义后:" + datas);
+                            console.log(data);
+                            $("#tab").datagrid("loadData", JSON.parse(data));
+                            // $("#tab").datagrid("reload", JSON.parse(data));
+                            //$("#tab").datagrid("loadData");
+                            //$("#tab").datagrid("loadData", next);
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    })
+                }
+
+            })
+        })
+    </script>
+</body>
+</html>

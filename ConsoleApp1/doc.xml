@@ -1,0 +1,13 @@
+<Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.xzsoft.com">
+  <Header />
+  <Body>
+    <getNotepads>
+      <appCode>PMS_YXGL</appCode>
+      <secretKey>e44698ed-84ca-4092-ab4d-af7d1db0f958</secretKey>
+      <orgCodes>ZDPA</orgCodes>
+      <logTypeName>值长日志</logTypeName>
+      <createdStart>2019-09-01</createdStart>
+      <createdEnd>2019-10-01</createdEnd>
+    </getNotepads>
+  </Body>
+</Envelope>

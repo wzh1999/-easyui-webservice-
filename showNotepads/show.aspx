@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="show.aspx.cs" Inherits="showNotepads.show" %>
